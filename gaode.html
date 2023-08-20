@@ -25,7 +25,7 @@
     <h4 style='color:grey'>公交到达圈查询</h4>
     <div class="input-item">
             <div class="input-item-prepend"><span class="input-item-text" >出发位置</span></div>
-            <input id='lnglat' type="text" value = '116.397428, 39.90923' >       
+            <input id='lnglat' type="text" value = '113.33095,23.132053' >       
     </div>
     <div class="input-item" style='margin-bottom:2rem;'>
         <label>时长(分钟)</label>
@@ -53,8 +53,8 @@
     var map = new AMap.Map("container", {
         resizeEnable: true,
         zoomEnable: true,
-        center: [116.397428, 39.90923],
-        zoom: 10
+        center: [113.33095,23.132053],
+        zoom: 12
     });
     
     function getLnglat(e) {
