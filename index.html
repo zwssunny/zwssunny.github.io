@@ -27,7 +27,7 @@
         <h4 style='color:black'>Mapbox等时圈、高德公交到达圈查询</h4>
         <div class="input-item">
             <div class="input-item-prepend"><span class="input-item-text">出发位置</span></div>
-            <input id='lnglat' type="text" value='113.306207, 23.097177'>
+            <input id='lnglat' type="text" value='113.33095,23.132053'>
         </div>
         <div class="input-item" style='margin-bottom:2rem;'>
             <label>时长(分钟)</label>
@@ -58,7 +58,7 @@
             <input type="button" class="btn" value="MapShaper" onClick="javascript:outputshp()" style='width:6rem;' />
         </div>
     </div>
-    <script src="https://webapi.amap.com/maps?v=1.4.15&key=f35aa69595d3fd9527dfe9033a640b9c&plugin=AMap.ArrivalRange"></script>
+    <script src="https://webapi.amap.com/maps?v=1.4.15&key=46d935ba90e1a704f4f7cff49b40ca7f&plugin=AMap.ArrivalRange"></script>
     <script src="https://cache.amap.com/lbs/static/jquery-1.9.1.js"></script>
     <script src="https://cache.amap.com/lbs/static/jquery.range.js"></script>
     <script src="https://cdn.bootcss.com/FileSaver.js/2014-11-29/FileSaver.js"></script>
@@ -68,7 +68,7 @@
         var map = new AMap.Map("container", {
             resizeEnable: true,
             zoomEnable: true,
-            center: [116.397428, 39.90923],
+            center: [113.33095,23.132053],
             zoom: 10,
             mapStyle: 'amap://styles/c96d75ff867ce8d95400aa40227ed278',
         });
