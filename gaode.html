@@ -1,0 +1,139 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>点到达圈</title>
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/> 
+    <style type="text/css">
+       html,body,#container{
+           height:100%;
+       }
+       .btn{
+           margin-left: 0.5rem;
+           width:4rem;
+       }
+    </style>
+    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/jquery.range.css"/>
+
+</head>
+
+<body>
+<div id="container"></div>
+
+<div class="input-card" style='width:25rem;'>
+    <h4 style='color:grey'>公交到达圈查询</h4>
+    <div class="input-item">
+            <div class="input-item-prepend"><span class="input-item-text" >出发位置</span></div>
+            <input id='lnglat' type="text" value = '116.397428, 39.90923' >       
+    </div>
+    <div class="input-item" style='margin-bottom:2rem;'>
+        <label>时长(分钟)</label>
+        <input type="hidden" id="t" class="single-slider" value="30" />
+    </div>
+    
+    <div class="input-item">
+            <div class="input-item-prepend">
+                <label class="input-item-text">出行方式</label>
+            </div>
+            <select iname="v" id="v">
+                <option selected value ="SUBWAY,BUS">地铁+公交</option>
+                <option value ="SUBWAY">地铁</option>
+                <option value ="BUS">公交</option>
+            </select>
+            <input id="search" type="button" class="btn" value="查询" />
+            <input id="clear" type="button" class="btn" value="清除" />
+    </div>
+</div>
+
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=46d935ba90e1a704f4f7cff49b40ca7f&plugin=AMap.ArrivalRange"></script>
+<script src="https://cache.amap.com/lbs/static/jquery-1.9.1.js"></script>
+<script src="https://cache.amap.com/lbs/static/jquery.range.js"></script>
+<script>
+    var map = new AMap.Map("container", {
+        resizeEnable: true,
+        zoomEnable: true,
+        center: [116.397428, 39.90923],
+        zoom: 10
+    });
+    
+    function getLnglat(e) {
+        var lnglat = e.lnglat;
+        document.getElementById('lnglat').value = e.lnglat.toString()
+        getArriveRange();
+    }
+    map.on( 'click', getLnglat);
+    
+    var centerMarker;
+    function addCenterMarker(position){
+        if(!centerMarker){
+            centerMarker= new AMap.Marker({
+                map: map,
+                position: position
+            });
+        }else{
+            centerMarker.setPosition(position)
+        }
+    }
+    
+    
+    var arrivalRange,polygons=[];
+    //添加多边形覆盖物
+    function getArriveRange() {
+        if(!arrivalRange){
+            arrivalRange = new AMap.ArrivalRange()
+        }
+        var lnglat = $("#lnglat").val().split(',');
+        var t = $("#t").val();
+        var v = $("#v").val();
+        
+        addCenterMarker(lnglat);
+        
+        arrivalRange.search(lnglat, t, function(status,result){
+            map.remove(polygons);
+            polygons = [];
+            if(result.bounds){
+                for(var i=0;i<result.bounds.length;i++){
+                   var polygon = new AMap.Polygon({
+                        fillColor:"#3366FF",
+                        fillOpacity:"0.4",
+                        strokeColor:"#00FF00",
+                        strokeOpacity:"0.5",
+                        strokeWeight:1
+                    });
+                    polygon.setPath(result.bounds[i]);
+                    polygons.push(polygon);
+                }
+                map.add(polygons);
+                map.setFitView();
+            }
+        },{
+            policy:v
+        });
+    }
+
+
+    var isChanged=false;
+    $(function(){
+        $('.single-slider').jRange({
+            onstatechange: getArriveRange,
+            from: 1,
+            to: 45,
+            step: 1,
+            scale: [1,15,30,45],
+            format: '%s',
+            width: 400,
+            showLabels: true,
+            showScale: true
+        });
+    });
+    getArriveRange();
+    
+    $('#search').on('click', getArriveRange);
+    $('#v').on('change', getArriveRange);
+    $('#clear').on('click', function(){map.remove(polygons)});
+
+</script>
+</body>
+
+</html>
